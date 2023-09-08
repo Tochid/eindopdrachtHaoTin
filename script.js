@@ -23,3 +23,4 @@ function draw() {
   keverY+=random(-5,5);
   image(kever,keverX,keverY,30,30);
 }
+// opdracht 1
