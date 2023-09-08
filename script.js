@@ -1,26 +1,22 @@
-var kater,katerKlein,landschap,kever;
-var keverX;
-var keverY;
+var strand;
+var strandX = 0;
 
 function preload() {
-  kater = loadImage("images/brieck.jpg");
-  bomen = loadImage("images/bomen.jpg");
-  kever = loadImage("images/sprites/kever.png");
+  strand = loadImage("images/backgrounds/strand.jpg");
 }
 
 function setup() {
-  canvas = createCanvas(450,450);
+  canvas = createCanvas(600,400);
   canvas.parent();
-  keverX = 150;
-  keverY = 100;
 }
 
 function draw() {
- background(kater);  
-  background('kater');
-  image(kater,25,25,400,400)
-  keverX+=random(-5,5);
-  keverY+=random(-5,5);
-  image(kever,keverX,keverY,30,30);
+  background('grey');
+  image(strand,strandX,0);
+  image(strand,strandX + strand.width,0);  
+
+  strandX--;
+  if (strandX == -strand.width) {
+    strandX = 0;
+  }  
 }
-// opdracht 1
