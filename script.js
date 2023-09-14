@@ -1,46 +1,32 @@
-var aantalRijenRaster = 6;
-var aantalKolommenRaster = 9;
-var celGrootte;
-
-var rij = 0;
-var kolom = 0;
-var spriteJos;
-var xJos;
-var yJos;
+var animatie = [];
+var aantalBeeldjes = 3;
+var nummer = 0;
 
 function preload() {
-  brug = loadImage("images/backgrounds/dame_op_brug_1800.jpg");
-  spriteJos = loadImage("images/sprites/Jos100px/Jos_0.png");
+  for (var b = 0;b < aantalBeeldjes;b++) {
+    nieuw_beeldje = loadImage("images/sprites/Jos_losse_beeldjes/Jos-" + b +".png");
+    animatie.push(nieuw_beeldje);
+  }
 }
 
 function setup() {
-  canvas = createCanvas(901,601);
+  canvas = createCanvas(460,460);
   canvas.parent();
-  celGrootte = width / aantalKolommenRaster;
+  noStroke();
+  frameRate(500);
+  textFont("Georgia");
+  textSize(18);
 }
 
 function draw() {
-  
-  tekenRaster();
-  
-}
+  background('lavender');
+  image(animatie[nummer],0,0);
+  nummer++;
 
-function tekenRaster() {
-  push();
-  noFill();
-  stroke('grey');
-  for(var rij = 0; rij < aantalRijenRaster; rij++){
-    for(var kolom = 0;kolom < aantalKolommenRaster; kolom++){
-       rect(celGrootte*kolom,rij*celGrootte,celGrootte,celGrootte);
+  if (nummer == aantalBeeldjes) {
+    nummer = 0;
   }
-  }
-  /*
-  Maak hieronder een dubbele herhaling om een raster te maken.
-  HINT: je kunt terugkijken naar het raster dat je in H1 hebt gemaakt.
-  Maak gebruik van de variabelen die bovenaan zijn gedeclareerd.
-  */
   
-     
-
-  pop();
+  text("frameCount=" + frameCount,5,20);
+  text("nummer=" + nummer,5,40);
 }
