@@ -30,9 +30,8 @@ function tekenRaster() {
   noFill();
   stroke('grey');
   for(var rij = 0; rij < aantalRijenRaster; rij++){
-     rect(celGrootte*rij,2*celGrootte,celGrootte,celGrootte);
     for(var kolom = 0;kolom < aantalKolommenRaster; kolom++){
-       rect(celGrootte*kolom,2*celGrootte,celGrootte,celGrootte);
+       rect(celGrootte*kolom,rij*celGrootte,celGrootte,celGrootte);
   }
   }
   /*
