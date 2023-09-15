@@ -1,69 +1,78 @@
-var aantalRijenRaster = 12;
-var aantalKolommenRaster = 18;
+var aantalRijenRaster = 6;
+var aantalKolommenRaster = 9;
 var celGrootte;
+
+var raster = {
+  aantalRijen: 6,
+  aantalKolommen:9,
+  celGrootte: null,
+  
+	berekencelGrootte() {
+ this.celGrootte = width/this.aantalKolommen;
+  },
+   teken() {
+  push();
+  noFill();
+  stroke('grey');
+  for (var rij = 0;rij < this.aantalRijen;rij++) {
+    for (var kolom = 0;kolom < this.aantalKolommen;kolom++) {
+      rect(kolom*this.celGrootte,rij*this.celGrootte,this.celGrootte,this.celGrootte);
+    }
+  }
+    pop();
+ }
+}
+
 
 var animatie = [];
 var aantalBeeldjes = 6;
 var nummer = 3;
-
 var frame;
 var xJos = 400;
 var yJos = 300;
 
 function preload() {
   brug = loadImage("images/backgrounds/dame_op_brug_1800.jpg");
-  frame = loadImage("images/sprites/Jos100px/Jos_" + nummer +".png");
-  
-   for (var b = 0;b < aantalBeeldjes;b++) {
-    nieuw_beeldje = loadImage("images/sprites/Jos_losse_beeldjes/Jos-" + b +".png");
-    animatie.push(nieuw_beeldje);
+  for (var b = 0;b < aantalBeeldjes;b++) {
+    frame = loadImage("images/sprites/Jos100px/Jos_" + b + ".png");
+    animatie.push(frame);
   }
 }
 
 function setup() {
   canvas = createCanvas(900,600);
   canvas.parent();
-  frameRate(11);
-  celGrootte = width / aantalKolommenRaster;
+  frameRate(10);
+ raster.berekencelGrootte()
 }
 
 function draw() {
   background(brug);
-  tekenRaster();
-   
-  
+  raster.teken() 
+
   if (keyIsDown(LEFT_ARROW)) {
-   xJos -= celGrootte;
-   nummer = 3;
- }
-  
+    xJos -= raster.celGrootte;
+    nummer = 2;
+  }
   if (keyIsDown(RIGHT_ARROW)) {
-    xJos += celGrootte;
-     nummer = 4;
+    xJos+=raster.celGrootte;
+    nummer=1;
   }
   if (keyIsDown(UP_ARROW)) {
-    yJos-=celGrootte;
-     nummer = 1;
+    yJos -= raster.celGrootte;
+    nummer = 4;
   }
   if (keyIsDown(DOWN_ARROW)) {
-    yJos += celGrootte;
-     nummer = 0;
+    yJos += raster.celGrootte;
+    nummer = 5;
   }
   
-  xJos = constrain(xJos,0,width - celGrootte);
-  yJos = constrain(yJos,0,height - celGrootte);
+  xJos = constrain(xJos,0,width - raster.celGrootte);
+  yJos = constrain(yJos,0,height - raster.celGrootte);
   
-   image(animatie[nummer],xJos,yJos,celGrootte,celGrootte);
+  image(animatie[nummer],xJos,yJos,raster.celGrootte,raster.celGrootte);
 }
 
-function tekenRaster() {
-  push();
-  noFill();
-  stroke('grey');
-  for (var rij = 0;rij < aantalRijenRaster;rij++) {
-    for (var kolom = 0;kolom < aantalKolommenRaster;kolom++) {
-      rect(kolom*celGrootte,rij*celGrootte,celGrootte,celGrootte);
-    }
-  }
-  pop();
-}
+
+  
+  
