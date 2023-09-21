@@ -1,41 +1,96 @@
-var aantalRijenRaster = 6;
-var aantalKolommenRaster = 9;
-var celGrootte;
-
 var raster = {
   aantalRijen: 6,
-  aantalKolommen:9,
+  aantalKolommen: 9,
   celGrootte: null,
-  
-	berekencelGrootte() {
- this.celGrootte = width/this.aantalKolommen;
+
+  berekenCelGrootte() {
+    this.celGrootte = canvas.width/this.aantalKolommen;
   },
-   teken() {
-  push();
-  noFill();
-  stroke('grey');
-  for (var rij = 0;rij < this.aantalRijen;rij++) {
-    for (var kolom = 0;kolom < this.aantalKolommen;kolom++) {
-      rect(kolom*this.celGrootte,rij*this.celGrootte,this.celGrootte,this.celGrootte);
+  teken() {
+    push();
+    noFill();
+    stroke('grey');
+    for (rij=0;rij<this.aantalRijen;rij++) {
+      for (kolom=0;kolom<this.aantalKolommen;kolom++) {
+        rect(kolom*this.celGrootte,rij*this.celGrootte,this.celGrootte,this.celGrootte);
+      }
     }
-  }
     pop();
- }
+  }
+}
+
+var jos = {
+  x: 400,
+  y: 300,
+  animatie: [],
+  aantalFrames: 6,
+  frameNummer: 3,
+  stapGrootte: null,
+
+  beweeg() {
+    if (keyIsDown(LEFT_ARROW)) {
+      this.x -= this.stapGrootte;
+      this.frameNummer = 2;
+    }
+    if (keyIsDown(RIGHT_ARROW)) {
+      this.x += this.stapGrootte;
+      this.frameNummer = 1;
+    }
+    if (keyIsDown(UP_ARROW)) {
+      this.y -= this.stapGrootte;
+      this.frameNummer = 4;
+    }
+    if (keyIsDown(DOWN_ARROW)) {
+      this.y += this.stapGrootte;
+      this.frameNummer = 5;
+    }
+
+    this.x = constrain(this.x,0,canvas.width-raster.celGrootte);
+    this.y = constrain(this.y,0,canvas.height-raster.celGrootte);
+  },
+
+  wordtGeraakt(vijand) {
+    if((this.x == vijand.x) && (this.y == vijand.y)){
+      return true;
+    } 
+    else {
+      return false;
+    }
+  
+  },
+
+  toon() {
+    image(this.animatie[this.frameNummer],this.x,this.y,raster.celGrootte,raster.celGrootte);
+  }
+}
+
+var alice = {
+  x: 700,
+  y: 200,
+  sprite: null,
+  stapGrootte: null,
+  
+  beweeg() {
+    this.x += floor(random(-1,2))*this.stapGrootte;
+    this.y += floor(random(-1,2))*this.stapGrootte;
+
+    this.x = constrain(this.x,0,canvas.width - raster.celGrootte);
+    this.y = constrain(this.y,0,canvas.height - raster.celGrootte);
+  },
+
+  toon() {
+    image(this.sprite,this.x,this.y,raster.celGrootte,raster.celGrootte);
+  }
 }
 
 
-var animatie = [];
-var aantalBeeldjes = 6;
-var nummer = 3;
-var frame;
-var xJos = 400;
-var yJos = 300;
 
 function preload() {
   brug = loadImage("images/backgrounds/dame_op_brug_1800.jpg");
-  for (var b = 0;b < aantalBeeldjes;b++) {
-    frame = loadImage("images/sprites/Jos100px/Jos_" + b + ".png");
-    animatie.push(frame);
+  alice.sprite = loadImage("images/sprites/Alice100px/Alice.png");
+  for (var b = 0;b < jos.aantalFrames;b++) {
+    frameJos = loadImage("images/sprites/Jos100px/Jos_" + b + ".png");
+    jos.animatie.push(frameJos);
   }
 }
 
@@ -43,36 +98,22 @@ function setup() {
   canvas = createCanvas(900,600);
   canvas.parent();
   frameRate(10);
- raster.berekencelGrootte()
+  raster.berekenCelGrootte();
+  jos.stapGrootte= 1*raster.celGrootte;
+  alice.stapGrootte= 1*raster.celGrootte;
 }
 
 function draw() {
   background(brug);
-  raster.teken() 
+  raster.teken();
+  jos.beweeg();
+  jos.toon();
+  alice.toon();
+  alice.beweeg();
 
-  if (keyIsDown(LEFT_ARROW)) {
-    xJos -= raster.celGrootte;
-    nummer = 2;
+
+  if (jos.wordtGeraakt(alice)) {
+    noLoop();
+    
   }
-  if (keyIsDown(RIGHT_ARROW)) {
-    xJos+=raster.celGrootte;
-    nummer=1;
-  }
-  if (keyIsDown(UP_ARROW)) {
-    yJos -= raster.celGrootte;
-    nummer = 4;
-  }
-  if (keyIsDown(DOWN_ARROW)) {
-    yJos += raster.celGrootte;
-    nummer = 5;
-  }
-  
-  xJos = constrain(xJos,0,width - raster.celGrootte);
-  yJos = constrain(yJos,0,height - raster.celGrootte);
-  
-  image(animatie[nummer],xJos,yJos,raster.celGrootte,raster.celGrootte);
 }
-
-
-  
-  
