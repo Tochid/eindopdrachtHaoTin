@@ -2,7 +2,7 @@ var raster = {
   aantalRijen: 6,
   aantalKolommen: 9,
   celGrootte: null,
-
+  
   berekenCelGrootte() {
     this.celGrootte = canvas.width/this.aantalKolommen;
   },
@@ -26,6 +26,7 @@ var jos = {
   aantalFrames: 6,
   frameNummer: 3,
   stapGrootte: null,
+  gehaald: false,
 
   beweeg() {
     if (keyIsDown(LEFT_ARROW)) {
@@ -44,32 +45,36 @@ var jos = {
       this.y += this.stapGrootte;
       this.frameNummer = 5;
     }
-
-    this.x = constrain(this.x,0,canvas.width-raster.celGrootte);
+    
+    this.x = constrain(this.x,0,canvas.width);
     this.y = constrain(this.y,0,canvas.height-raster.celGrootte);
+    
+    if (this.x == canvas.width) {
+      this.gehaald = true;
+    }
   },
-
-  wordtGeraakt(vijand) {
-    if((this.x == vijand.x) && (this.y == vijand.y)){
+  
+  wordtGeraakt(v) {
+    if (this.x == v.x && this.y == v.y) {
       return true;
-    } 
+    }
     else {
       return false;
     }
-  
   },
-
+  
   toon() {
     image(this.animatie[this.frameNummer],this.x,this.y,raster.celGrootte,raster.celGrootte);
   }
 }
+
 
 var alice = {
   x: 700,
   y: 200,
   sprite: null,
   stapGrootte: null,
-  
+
   beweeg() {
     this.x += floor(random(-1,2))*this.stapGrootte;
     this.y += floor(random(-1,2))*this.stapGrootte;
@@ -77,12 +82,11 @@ var alice = {
     this.x = constrain(this.x,0,canvas.width - raster.celGrootte);
     this.y = constrain(this.y,0,canvas.height - raster.celGrootte);
   },
-
+  
   toon() {
     image(this.sprite,this.x,this.y,raster.celGrootte,raster.celGrootte);
   }
 }
-
 
 
 function preload() {
@@ -99,21 +103,25 @@ function setup() {
   canvas.parent();
   frameRate(10);
   raster.berekenCelGrootte();
-  jos.stapGrootte= 1*raster.celGrootte;
-  alice.stapGrootte= 1*raster.celGrootte;
+  jos.stapGrootte = 1*raster.celGrootte;
+  alice.stapGrootte = 1*raster.celGrootte;
 }
 
 function draw() {
   background(brug);
   raster.teken();
   jos.beweeg();
+  alice.beweeg();
   jos.toon();
   alice.toon();
-  alice.beweeg();
-
-
   if (jos.wordtGeraakt(alice)) {
     noLoop();
-    
+  }
+    if (jos.gehaald) {
+    background("green");
+    fill("white");
+    textSize(200);
+    text("geegee", 30,300);
+  
   }
 }
