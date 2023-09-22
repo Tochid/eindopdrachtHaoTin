@@ -1,18 +1,20 @@
-class rasterclass  {
-  constructor(rij,kolom){
-  this.aantalRijen= rij;
- this.aantalKolommen= kolom;
- this.celGrootte= null;
+class Raster {
+  constructor(fuck,you) {
+    this.aantalRijen = fuck;
+    this.aantalKolommen = you;
+    this.celGrootte = null;
   }
+  
   berekenCelGrootte() {
-    this.celGrootte = canvas.width/this.aantalKolommen;
-  };
+    this.celGrootte = canvas.width / this.aantalKolommen;
+  }
+  
   teken() {
     push();
     noFill();
     stroke('grey');
-    for (var rij=0;rij<this.aantalRijen;rij++) {
-      for (var kolom=0;kolom<this.aantalKolommen;kolom++) {
+    for (var rij = 0;rij < this.aantalRijen;rij++) {
+      for (var kolom = 0;kolom < this.aantalKolommen;kolom++) {
         rect(kolom*this.celGrootte,rij*this.celGrootte,this.celGrootte,this.celGrootte);
       }
     }
@@ -68,7 +70,7 @@ class Jos {
   toon() {
     image(this.animatie[this.frameNummer],this.x,this.y,raster.celGrootte,raster.celGrootte);
   }
-}
+}  
 
 class Vijand {
   constructor(x,y) {
@@ -102,7 +104,8 @@ function setup() {
   textFont("Verdana");
   textSize(90);
   
-  raster = new rasterclass(6,9);
+  raster = new Raster(6,9);
+  
   raster.berekenCelGrootte();
   
   eve = new Jos();
@@ -111,38 +114,39 @@ function setup() {
     frameEve = loadImage("images/sprites/Eve100px/Eve_" + b + ".png");
     eve.animatie.push(frameEve);
   }
-    bob = new Vijand(700,200);
-  bob.stapGrootte = 1*eve.stapGrootte;
-  bob.sprite = loadImage("images/sprites/Bob100px/Bob.png");
-  
   
   alice = new Vijand(700,200);
   alice.stapGrootte = 1*eve.stapGrootte;
   alice.sprite = loadImage("images/sprites/Alice100px/Alice.png");
-}
 
+  bob = new Vijand(600,400);
+  bob.stapGrootte = 1*eve.stapGrootte;
+  bob.sprite = loadImage("images/sprites/Bob100px/Bob.png");  
+}
 
 function draw() {
   background(brug);
   raster.teken();
   eve.beweeg();
-  bob.beweeg();
   alice.beweeg();
+  bob.beweeg();
   eve.toon();
   alice.toon();
   bob.toon();
+
+ if (bob.x == alice.x && bob.y == alice.y){
+
+   bob.beweeg
+ }
   
-  if (eve.wordtGeraakt(alice)) {
-    noLoop();
-  }
-   if (eve.wordtGeraakt(bob)) {
+  if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob)) {
     noLoop();
   }
   
   if (eve.gehaald) {
     background('green');
     fill('white');
-    text("GEEEEEEGEEEEEE",30,300);
+    text("Je hebt gewonnen!",30,300);
     noLoop();
   }
 }
