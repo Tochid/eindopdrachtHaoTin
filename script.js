@@ -1,50 +1,50 @@
-class Boom {
+class Knikker {
   constructor() {
-  this.leeftijd = round(random(1,5));
-  this.R = random(100,200);
-  this.G = 155;
-  this.B = random(0,100);
-  this.x = random(50,720);
-  }
-  
-  groei() {
-    if (this.leeftijd < 10) {
-      this.leeftijd++;
-    }
+    this.diameter = 40;
+    this.straal = this.diameter / 2;
+    this.x = random(this.straal,canvas.width - this.straal);
+    this.y = random(this.straal,canvas.height - this.straal);
+    this.snelheidX = random(1,10);
+    this.snelheidY = random(1,10);
   }
 
+  beweeg() {
+    this.x += this.snelheidX;
+    this.y += this.snelheidY;
+    
+    if (this.x < this.straal || this.x > canvas.width - this.straal) {
+      this.snelheidX *= -1;
+    }
+    if (this.y < this.straal || this.y > canvas.height - this.straal) {
+      this.snelheidY *= -1;
+    }
+  }
+  
   teken() {
-    push();
-    translate(this.x,375);
-    fill('sienna');
-    rect(0,0,20 + 2*this.leeftijd,-100 - 10*this.leeftijd);
-    fill(this.R,this.G,this.B);
-    ellipse((20 + 2*this.leeftijd) / 2,-90 -5*this.leeftijd,80 + 4*this.leeftijd,130 + 10*this.leeftijd);
-    pop();
+    fill(255,255,255,1);
+    ellipse(this.x,this.y,this.diameter);
   }
 }
 
-// we maken een lege array waar alle objecten in komen te staan
-var bomen = [];
+var knikkerVerzameling = [];
 
 function setup() {
-  canvas = createCanvas(800,400);
+  canvas = createCanvas(1000,300);
   canvas.parent();
+  frameRate(236);
+  colorMode(RGB,255,255,255,1);
+  background(0,0,75,1);
   noStroke();
-  frameRate(1);
-  
-  for (var b = 0; b < 11; b++) {
-    bomen.push(new Boom());
+  k1 = new Knikker();
+  for (var b = 0; b < 10; b++) {
+    knikkerVerzameling.push(new Knikker());
   }
 }
 
 function draw() {
-  bomen[10].G = 0;
-  background('orange');
-  fill('wheat');
-  rect(0,350,canvas.width,canvas.height-350);
-  for (var n = 0;n < bomen.length;n++) {
-    bomen[n].teken();
-    bomen[n].groei();
+  background(0,0,75,0.2);
+  for (var n = 0; n < knikkerVerzameling.length; n++) {
+    knikkerVerzameling[n].beweeg();
+    knikkerVerzameling[n].teken();
   }
 }
