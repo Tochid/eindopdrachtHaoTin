@@ -1,3 +1,16 @@
+leven = 1
+
+class Appel{
+  constructor(){
+      this.x = floor(random(1,raster.aantalKolommen))*raster.celGrootte;
+    this.y = floor(random(0,raster.aantalRijen))*raster.celGrootte;
+  }
+  
+  toon() {
+    image(appelImage,this.x,this.y,raster.celGrootte,raster.celGrootte);   
+  }
+}
+
 class Raster {
   constructor(r,k) {
     this.aantalRijen = r;
@@ -17,6 +30,13 @@ class Raster {
       for (var kolom = 0;kolom < this.aantalKolommen;kolom++) {
         rect(kolom*this.celGrootte,rij*this.celGrootte,this.celGrootte,this.celGrootte);
       }
+    }
+    stroke('orange');
+    for (var rij = 0;rij < this.aantalRijen;rij++) {
+      rect(0,rij*this.celGrootte,this.celGrootte,this.celGrootte);
+    }
+    for (var kolom = 0;kolom < this.aantalKolommen;kolom++) {
+      rect(kolom*this.celGrootte,0,this.celGrootte,this.celGrootte);
     }
     pop();
   }
@@ -57,7 +77,16 @@ class Jos {
       this.gehaald = true;
     }
   }
-  
+ 
+  staatop(appel) {
+    if (this.x == appel.x && this.y == appel.y) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   wordtGeraakt(vijand) {
     if (this.x == vijand.x && this.y == vijand.y) {
       return true;
@@ -66,6 +95,7 @@ class Jos {
       return false;
     }
   }
+
   
   toon() {
     image(this.animatie[this.frameNummer],this.x,this.y,raster.celGrootte,raster.celGrootte);
@@ -95,6 +125,7 @@ class Vijand {
 
 function preload() {
   brug = loadImage("images/backgrounds/dame_op_brug_1800.jpg");
+  appelImage = loadImage("images/sprites/appel_1.png")
 }
 
 function setup() {
@@ -104,9 +135,11 @@ function setup() {
   textFont("Verdana");
   textSize(90);
   
-  raster = new Raster(6,9);
+  raster = new Raster(12,18);
   
   raster.berekenCelGrootte();
+
+  appel1 = new Appel();
   
   eve = new Jos();
   eve.stapGrootte = 1*raster.celGrootte;
@@ -122,6 +155,7 @@ function setup() {
   bob = new Vijand(600,400);
   bob.stapGrootte = 1*eve.stapGrootte;
   bob.sprite = loadImage("images/sprites/Bob100px/Bob.png");  
+
 }
 
 function draw() {
@@ -130,6 +164,7 @@ function draw() {
   eve.beweeg();
   alice.beweeg();
   bob.beweeg();
+  appel1.toon();
   eve.toon();
   alice.toon();
   bob.toon();
@@ -137,6 +172,11 @@ function draw() {
   if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob)) {
     noLoop();
   }
+
+   if (eve.staatop(appel1)) {
+     leven += 1
+     
+   }
   
   if (eve.gehaald) {
     background('green');
