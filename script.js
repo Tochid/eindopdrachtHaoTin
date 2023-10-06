@@ -1,5 +1,3 @@
-leven = 1
-
 class Appel{
   constructor(){
       this.x = floor(random(1,raster.aantalKolommen))*raster.celGrootte;
@@ -50,6 +48,7 @@ class Jos {
     this.frameNummer =  3;
     this.stapGrootte = null;
     this.gehaald = false;
+    this.levens = 1;
   }
   
   beweeg() {
@@ -158,6 +157,7 @@ function setup() {
 
 }
 
+
 function draw() {
   background(brug);
   raster.teken();
@@ -169,13 +169,21 @@ function draw() {
   alice.toon();
   bob.toon();
   
+  
+  fill("black");
+  textSize(50)
+  text("levens aantal:", 10,50)
+  
   if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob)) {
+    background('red');
+    fill('black');
+    textSize(80);
+    text("skill issue",30,300);
     noLoop();
   }
 
    if (eve.staatop(appel1)) {
-     leven += 1
-     
+    
    }
   
   if (eve.gehaald) {
@@ -184,4 +192,5 @@ function draw() {
     text("Je hebt gewonnen!",30,300);
     noLoop();
   }
+
 }
