@@ -9,7 +9,23 @@ class Appel{
   }
 }
 
-class Raster {
+class Bom {
+  constructor() {
+    this.x = floor(random(1,raster.aantalKolommen))*raster.celGrootte;
+    this.y = floor(random(0,raster.aantalRijen))*raster.celGrootte;
+  }
+  
+  toon() {
+    image(bomImage,this.x,this.y,raster.celGrootte,raster.celGrootte);
+  }
+  beweeg(){
+
+    
+    this.y = floor(random(0,raster.aantalRijen))*raster.celGrootte;
+  }
+}
+
+class raster {
   constructor(r,k) {
     this.aantalRijen = r;
     this.aantalKolommen = k;
@@ -52,19 +68,19 @@ class Jos {
   }
   
   beweeg() {
-    if (keyIsDown(LEFT_ARROW)) {
+    if (keyIsDown(65)) {
       this.x -= this.stapGrootte;
       this.frameNummer = 2;
     }
-    if (keyIsDown(RIGHT_ARROW)) {
+    if (keyIsDown(68)) {
       this.x += this.stapGrootte;
       this.frameNummer = 1;
     }
-    if (keyIsDown(UP_ARROW)) {
+    if (keyIsDown(87)) {
       this.y -= this.stapGrootte;
       this.frameNummer = 4;
     }
-    if (keyIsDown(DOWN_ARROW)) {
+    if (keyIsDown(83)) {
       this.y += this.stapGrootte;
       this.frameNummer = 5;
     }
@@ -125,8 +141,9 @@ class Vijand {
 function preload() {
   brug = loadImage("images/backgrounds/dame_op_brug_1800.jpg");
   appelImage = loadImage("images/sprites/appel_1.png")
+  bomImage = loadImage("images/sprites/bom_100px.png");
 }
-
+var bommenzak = [];
 function setup() {
   canvas = createCanvas(900,600);
   canvas.parent();
@@ -134,11 +151,16 @@ function setup() {
   textFont("Verdana");
   textSize(90);
   
-  raster = new Raster(12,18);
+  raster = new raster(12,18);
   
   raster.berekenCelGrootte();
 
   appel1 = new Appel();
+  bom1 = new Bom();
+
+  for(var b = 0; b<5; b++){
+    bommenzak.push(new Bom());
+  }
   
   eve = new Jos();
   eve.stapGrootte = 1*raster.celGrootte;
@@ -161,6 +183,12 @@ function setup() {
 function draw() {
   background(brug);
   raster.teken();
+
+  for(var i = 0; i < bommenzak.length; i++){
+    bommenzak[i].toon();
+    bommenzak[i].beweeg(); 
+  }
+  
   eve.beweeg();
   alice.beweeg();
   bob.beweeg();
@@ -168,23 +196,31 @@ function draw() {
   eve.toon();
   alice.toon();
   bob.toon();
+  bom1.toon();
   
   
   fill("black");
   textSize(50)
-  text("levens aantal:", 10,50)
+  text("levens aantal:" + eve.levens, 10,50)
   
   if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob)) {
+   eve.levens -= 1
+  }
+
+   if (eve.staatop(appel1)) {
+    eve.levens += 1
+
+     appel1.x = floor(random(1,raster.aantalKolommen))*raster.celGrootte;
+    appel1.y = floor(random(0,raster.aantalRijen))*raster.celGrootte;
+   }
+
+if(eve.levens==0 || eve.levens<0){
     background('red');
     fill('black');
     textSize(80);
     text("skill issue",30,300);
     noLoop();
-  }
-
-   if (eve.staatop(appel1)) {
-    
-   }
+}
   
   if (eve.gehaald) {
     background('green');
