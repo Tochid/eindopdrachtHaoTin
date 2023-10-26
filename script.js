@@ -11,8 +11,9 @@ class Appel{
 
 class Bom {
   constructor() {
-    this.x = floor(random(1,raster.aantalKolommen))*raster.celGrootte;
+    this.x = floor(random(9,raster.aantalKolommen))*raster.celGrootte;
     this.y = floor(random(0,raster.aantalRijen))*raster.celGrootte;
+    this.velocity = floor(random(1,3));
   }
   
   toon() {
@@ -21,7 +22,7 @@ class Bom {
   beweeg(){
 
     
-    this.y = floor(random(0,raster.aantalRijen))*raster.celGrootte;
+    this.y = (this.velocity) *raster.celGrootte;
   }
 }
 
@@ -65,6 +66,7 @@ class Jos {
     this.stapGrootte = null;
     this.gehaald = false;
     this.levens = 1;
+    this.kabloom = false;
   }
   
   beweeg() {
@@ -138,6 +140,17 @@ class Vijand {
   }
 }
 
+intersect(bommenzak) {
+  for (var x = 0;x < bommenzak.length;x++) {
+    if (this.x == bommenzak[x].x && this.y == bommenzak[x].y) {
+      kabloom = true;
+    }
+  
+    return this.kabloom false;
+  }
+}
+
+
 function preload() {
   brug = loadImage("images/backgrounds/dame_op_brug_1800.jpg");
   appelImage = loadImage("images/sprites/appel_1.png")
@@ -147,7 +160,7 @@ var bommenzak = [];
 function setup() {
   canvas = createCanvas(900,600);
   canvas.parent();
-  frameRate(10);
+  frameRate(30);
   textFont("Verdana");
   textSize(90);
   
@@ -203,7 +216,7 @@ function draw() {
   textSize(50)
   text("levens aantal:" + eve.levens, 10,50)
   
-  if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob)) {
+  if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob) || eve.intersect(kabloom)) {
    eve.levens -= 1
   }
 
