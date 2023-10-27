@@ -12,8 +12,8 @@ class Appel{
 class Bom {
   constructor() {
     this.x = floor(random(9,raster.aantalKolommen))*raster.celGrootte;
-    this.y = floor(random(0,raster.aantalRijen))*raster.celGrootte;
-    this.velocity = floor(random(1,3));
+    this.y = floor(random(0,(raster.aantalRijen - 8)))*raster.celGrootte;
+    this.velocity = 1;
   }
   
   toon() {
@@ -22,7 +22,11 @@ class Bom {
   beweeg(){
 
     
-    this.y = (this.velocity) *raster.celGrootte;
+    this.y += (this.velocity) *raster.celGrootte;
+    
+    if(this.y > (raster.aantalRijen*raster.celGrootte)){
+      this.y = 0
+    }
   }
 }
 
@@ -94,6 +98,19 @@ class Jos {
       this.gehaald = true;
     }
   }
+    wordtGeraakt() {
+    for (var x = 0;x < bommenzak.length;x++) {
+      if (this.x == bommenzak[x].x && this.y == bommenzak[x].y ) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+  
+    } 
+  
+
  
   staatop(appel) {
     if (this.x == appel.x && this.y == appel.y) {
@@ -140,15 +157,8 @@ class Vijand {
   }
 }
 
-intersect(bommenzak) {
-  for (var x = 0;x < bommenzak.length;x++) {
-    if (this.x == bommenzak[x].x && this.y == bommenzak[x].y) {
-      kabloom = true;
-    }
-  
-    return this.kabloom false;
-  }
-}
+
+
 
 
 function preload() {
@@ -160,7 +170,7 @@ var bommenzak = [];
 function setup() {
   canvas = createCanvas(900,600);
   canvas.parent();
-  frameRate(30);
+  frameRate(10);
   textFont("Verdana");
   textSize(90);
   
@@ -171,7 +181,7 @@ function setup() {
   appel1 = new Appel();
   bom1 = new Bom();
 
-  for(var b = 0; b<5; b++){
+  for(var b = 0; b<7; b++){
     bommenzak.push(new Bom());
   }
   
@@ -209,14 +219,14 @@ function draw() {
   eve.toon();
   alice.toon();
   bob.toon();
-  bom1.toon();
+  
   
   
   fill("black");
   textSize(50)
   text("levens aantal:" + eve.levens, 10,50)
   
-  if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob) || eve.intersect(kabloom)) {
+  if (eve.wordtGeraakt(alice) || eve.wordtGeraakt(bob) || eve.intersect(bommenzak)) {
    eve.levens -= 1
   }
 
