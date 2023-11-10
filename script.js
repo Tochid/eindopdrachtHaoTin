@@ -232,14 +232,14 @@ if(eve.levens==0 || eve.levens<0){
     background('red');
     fill('black');
     textSize(80);
-    text("skill issue",30,300);
+    text("DEFENDERS WIN",30,300);
     noLoop();
 }
   // als Jos de overkant heeft bereikt gaat er een victory screen staan inplaats van het speelplek.
   if (eve.gehaald) {
     background('green');
     fill('white');
-    text("Je hebt gewonnen!",30,300);
+    text("ATTACKERS WIN",30,300);
     noLoop();
   }
 
